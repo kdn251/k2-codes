@@ -16,3 +16,8 @@ model Example {
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 }
+
+model UniqueVisitor {
+    id        Int      @id @default(autoincrement())
+    count     Int      
+}
