@@ -2,8 +2,7 @@ import { type NextPage } from "next";
 import Head from "next/head";
 import React from "react";
 import { api } from "~/utils/api";
-
-
+import Link from "next/link";
 
 const Home: NextPage = () => {
   const mutation = api.count.incrementCount.useMutation();
@@ -22,13 +21,13 @@ const Home: NextPage = () => {
           <li className="underline"><a href="https://www.instagram.com/kevinnaughtonjr/" target="_blank">Instagram 📸</a></li>
           <li className="underline"><a href="https://www.linkedin.com/in/kevindnaughtonjr/" target="_blank">LinkedIn 👔</a></li>
           <li className="underline">
-            <a href="/onlyfans"
+            <Link href="/onlyfans"
               onClick={(event) => {
                 event.preventDefault()
                 mutation.mutate();
                 window.location.href = "https://k2.codes/onlyfans";
               }}
-            >OnlyFans 🤫</a>
+            >OnlyFans 🤫</Link>
           </li>
         </ul>
 
