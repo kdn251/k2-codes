@@ -1,15 +1,12 @@
 import { type NextPage } from "next";
 import Head from "next/head";
-import Link from "next/link";
 import React from "react";
 import { api } from "~/utils/api";
-import { publicProcedure } from "~/server/api/trpc";
+
+
 
 const Home: NextPage = () => {
-  api.count.incrementCount.useMutation().mutate();
-  // if (isLoading) {
-  //   return <div>Loading...</div>
-  // }
+  const mutation = api.count.incrementCount.useMutation();
   return (
     <>
       <Head>
@@ -24,7 +21,15 @@ const Home: NextPage = () => {
           <li className="underline"><a href="https://twitter.com/kevinnaughtonjr" target="_blank">Twitter 🐦</a></li>
           <li className="underline"><a href="https://www.instagram.com/kevinnaughtonjr/" target="_blank">Instagram 📸</a></li>
           <li className="underline"><a href="https://www.linkedin.com/in/kevindnaughtonjr/" target="_blank">LinkedIn 👔</a></li>
-          <li className="underline"><Link href="/onlyfans">OnlyFans 🤫</Link></li>
+          <li className="underline">
+            <a href="/onlyfans"
+              onClick={(event) => {
+                event.preventDefault()
+                mutation.mutate();
+                window.location.href = "https://k2.codes/onlyfans";
+              }}
+            >OnlyFans 🤫</a>
+          </li>
         </ul>
 
         <h1 className="text-2xl text-center pb-2 pt-4">biggest life achievements 🏆</h1>
