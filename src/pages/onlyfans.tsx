@@ -18,7 +18,7 @@ const OnlyFansPage: NextPage = () => {
       </Head>
       <main>
         <PageLoadCount />
-        <p className="text-center">People have searched for Kevin's OnlyFan's page 🥵</p>
+        <p className="text-center">People have searched for Kevin&apos;s OnlyFans page 🥵</p>
       </main>
     </>
   );
