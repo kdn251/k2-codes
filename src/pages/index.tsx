@@ -22,7 +22,7 @@ const Home: NextPage = () => {
           <li className="underline"><a href="https://twitter.com/kevinnaughtonjr/creator-subscriptions/subscribe" target="_blank">Twitter Subscription 🤝</a></li>
           <li className="underline"><a href="https://www.instagram.com/kevinnaughtonjr/" target="_blank">Instagram 📸</a></li>
           <li className="underline"><a href="https://discord.gg/TCzpaDSZGQ" target="_blank">Discord 💬</a></li>
-          <li className="underline"><a href="t.me/knaughtjr" target="_blank">Telegram 💭</a></li>
+          <li className="underline"><a href="https://t.me/knaughtjr" target="_blank">Telegram 💭</a></li>
           <li className="underline"><a href="https://www.linkedin.com/in/kevindnaughtonjr/" target="_blank">LinkedIn 👔</a></li>
           <li className="underline"><a href="https://amzn.to/3Oakt3i" target="_blank">My Gear 🎒</a></li>
           <li className="underline"><a href="https://thedailybyte.dev/?ref=kevin" target="_blank">The Daily Byte 👨‍💻</a></li>
