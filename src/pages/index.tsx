@@ -22,7 +22,7 @@ const Home: NextPage = () => {
           <li className="underline"><a href="https://www.linkedin.com/in/kevindnaughtonjr/" target="_blank">linkedin 🤮</a></li>
           <li className="underline"><a href="https://www.passionfroot.me/kevin-naughton-jr" target="_blank">collab 🤝</a></li>
           <li className="underline"><a href="https://amzn.to/3Oakt3i" target="_blank">my stuff 🎒</a></li>
-          <li className="underline"><a href="https://thedailybyte.dev/?ref=kevin" target="_blank">the daily byte 💻‍💻</a></li>
+          <li className="underline"><a href="https://thedailybyte.dev/?ref=kevin" target="_blank">the daily byte 💻</a></li>
           <li className="underline">
             <Link href="/onlyfans"
               onClick={(event) => {
