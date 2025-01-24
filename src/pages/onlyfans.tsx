@@ -8,7 +8,7 @@ const OnlyFansPage: NextPage = () => {
 
   useEffect(() => {
     incrementedCount.mutate(); 
-  }, [incrementedCount]);
+  }, []);
 
   const { data } = api.count.getCount.useQuery();
   if (!data) {

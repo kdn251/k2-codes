@@ -27,7 +27,7 @@ const Home: NextPage = () => {
             <Link href="/onlyfans"
               onClick={(event) => {
                 event.preventDefault()
-                mutation.mutate();
+                // mutation.mutate();
                 window.location.href = "https://k2.codes/onlyfans";
               }}
             >onlyfans 🤫</Link>
