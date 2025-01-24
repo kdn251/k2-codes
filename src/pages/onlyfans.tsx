@@ -4,7 +4,10 @@ import { api } from "~/utils/api";
 
 const OnlyFansPage: NextPage = () => {
   const PageLoadCount = () => {
-    const { data } = api.count.getCount.useQuery();
+    // const { data } = api.count.getCount.useQuery();
+    const { data } = api.count.findUnique.useQuery({
+      where: { id: 1 },
+    }); 
     if (!data) {
       return <div className="text-center">Loading...</div>
     }
