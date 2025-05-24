@@ -1,5 +1,6 @@
 import { exampleRouter } from "~/server/api/routers/example";
 import { countRouter } from "~/server/api/routers/count";
+import { dotfilesRouter } from "~/server/api/routers/dotfiles";
 import { createTRPCRouter } from "~/server/api/trpc";
 
 /**
@@ -10,6 +11,7 @@ import { createTRPCRouter } from "~/server/api/trpc";
 export const appRouter = createTRPCRouter({
   example: exampleRouter,
   count: countRouter,
+  dotfiles: dotfilesRouter,
 });
 
 // export type definition of API
