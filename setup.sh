@@ -3,37 +3,12 @@
 # Dotfiles installation script for Arch Linux
 set -e  # Exit on any error
 
-# Check if running as root, if not, re-run with sudo
-if [ "$EUID" -ne 0 ]; then
-    echo "This script needs root privileges. Re-running with sudo..."
-    exec sudo "$0" "$@"
-fi
-
-# Get the actual user (not root) for makepkg operations
-if [ -n "$SUDO_USER" ]; then
-    ACTUAL_USER="$SUDO_USER"
-else
-    ACTUAL_USER="$(logname 2>/dev/null || echo $USER)"
-fi
-ACTUAL_HOME="/home/$ACTUAL_USER"
-
 # Colors for output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 NC='\033[0m' # No Color
-
-# Installation summary variables
-PACMAN_SUCCESS=false
-PACMAN_COUNT=0
-AUR_SUCCESS=false
-AUR_COUNT=0
-YAY_INSTALLED=false
-STOW_SUCCESS=false
-STOW_FAILED=()
-SOFTWARE_DIR_SUCCESS=false
-LY_SERVICE_SUCCESS=false
 
 # Function to print colored output
 print_status() {
@@ -52,6 +27,92 @@ print_error() {
     echo -e "${RED}[ERROR]${NC} $1"
 }
 
+# Function to display ASCII art
+show_ascii_art() {
+    echo -e "${BLUE}"
+    cat << "EOF"
+    ╔═══════════════════════════════════════════════════════════════╗
+    ║                                                               ║
+    ║        ██╗  ██╗██████╗                                        ║
+    ║        ██║ ██╔╝╚════██╗                                       ║
+    ║        █████╔╝  █████╔╝                                       ║
+    ║        ██╔═██╗ ██╔═══╝                                        ║
+    ║        ██║  ██╗███████╗                                       ║
+    ║        ╚═╝  ╚═╝╚══════╝                                       ║
+    ║                                                               ║
+    ║    ██████╗  ██████╗ ████████╗███████╗██╗██╗     ███████╗███████╗
+    ║    ██╔══██╗██╔═══██╗╚══██╔══╝██╔════╝██║██║     ██╔════╝██╔════╝
+    ║    ██║  ██║██║   ██║   ██║   █████╗  ██║██║     █████╗  ███████╗
+    ║    ██║  ██║██║   ██║   ██║   ██╔══╝  ██║██║     ██╔══╝  ╚════██║
+    ║    ██████╔╝╚██████╔╝   ██║   ██║     ██║███████╗███████╗███████║
+    ║    ╚═════╝  ╚═════╝    ╚═╝   ╚═╝     ╚═╝╚══════╝╚══════╝╚══════╝
+    ║                                                               ║
+    ║                 🐧 arch linux setup script 🐧                 ║
+    ║                                                               ║
+    ║           install your dotfiles and packages                  ║
+    ║              (press Ctrl+C to cancel anytime)                 ║
+    ║                                                               ║
+    ╚═══════════════════════════════════════════════════════════════╝
+EOF
+    echo -e "${NC}"
+}
+
+# Function to show countdown
+show_countdown() {
+    echo
+    print_status "Starting in:"
+    for i in {5..1}; do
+        echo -ne "${YELLOW}   $i ${NC}"
+        sleep 1
+        echo -ne "\r   "
+    done
+    echo -e "${GREEN}🚀 Let's go!${NC}"
+    echo
+}
+
+# Show ASCII art and countdown
+clear
+show_ascii_art
+show_countdown
+
+# Ensure we're NOT running as root
+if [ "$EUID" -eq 0 ]; then
+    print_error "This script should not be run as root! Run as your regular user."
+    exit 1
+fi
+
+# Step 1: Add current user to sudoers with NOPASSWD temporarily
+print_status "Setting up temporary passwordless sudo..."
+echo "$(whoami) ALL=(ALL) NOPASSWD: ALL" | sudo tee /etc/sudoers.d/temp-nopasswd
+
+# Get the actual user info before we start
+ACTUAL_USER="$(whoami)"
+ACTUAL_HOME="$HOME"
+
+print_status "Running as user: $ACTUAL_USER"
+print_status "Home directory: $ACTUAL_HOME"
+
+# Step 2: Install git first (required for cloning dotfiles)
+print_status "Installing git..."
+if sudo pacman -S --needed --noconfirm git; then
+    print_success "Git installed successfully"
+else
+    print_error "Failed to install git"
+    sudo rm /etc/sudoers.d/temp-nopasswd
+    exit 1
+fi
+
+# Installation summary variables
+PACMAN_SUCCESS=false
+PACMAN_COUNT=0
+AUR_SUCCESS=false
+AUR_COUNT=0
+YAY_INSTALLED=false
+STOW_SUCCESS=false
+STOW_FAILED=()
+SOFTWARE_DIR_SUCCESS=false
+LY_SERVICE_SUCCESS=false
+
 # Function to print installation summary
 print_summary() {
     echo
@@ -61,53 +122,53 @@ print_summary() {
     
     # Git clone status
     if [ -d "$ACTUAL_HOME/dotfiles/.git" ]; then
-        print_success "✓ Dotfiles repository cloned"
+        print_success "✅ Dotfiles repository cloned"
     else
-        print_error "✗ Dotfiles repository failed"
+        print_error "❌ Dotfiles repository failed"
     fi
     
     # Pacman packages
     if [ "$PACMAN_SUCCESS" = true ]; then
-        print_success "✓ Pacman packages installed ($PACMAN_COUNT packages)"
+        print_success "✅ Pacman packages installed ($PACMAN_COUNT packages)"
     else
-        print_error "✗ Pacman packages failed"
+        print_error "❌ Pacman packages failed"
     fi
     
     # Yay installation
     if [ "$YAY_INSTALLED" = true ]; then
-        print_success "✓ yay AUR helper installed"
+        print_success "✅ yay AUR helper installed"
     fi
     
     # AUR packages
     if [ "$AUR_SUCCESS" = true ]; then
-        print_success "✓ AUR packages installed ($AUR_COUNT packages)"
+        print_success "✅ AUR packages installed ($AUR_COUNT packages)"
     else
-        print_error "✗ AUR packages failed"
+        print_error "❌ AUR packages failed"
     fi
     
     # Stow status
     if [ "$STOW_SUCCESS" = true ]; then
-        print_success "✓ All dotfiles stowed successfully"
+        print_success "✅ All dotfiles stowed successfully"
     else
         if [ ${#STOW_FAILED[@]} -eq 0 ]; then
-            print_success "✓ Dotfiles stowed (some individual directories)"
+            print_success "✅ Dotfiles stowed (some individual directories)"
         else
-            print_warning "⚠ Some stow operations failed: ${STOW_FAILED[*]}"
+            print_warning "⚠️ Some stow operations failed: ${STOW_FAILED[*]}"
         fi
     fi
     
     # Software directory
     if [ "$SOFTWARE_DIR_SUCCESS" = true ]; then
-        print_success "✓ Software directory created"
+        print_success "✅ Software directory created"
     else
-        print_error "✗ Software directory creation failed"
+        print_error "❌ Software directory creation failed"
     fi
     
     # Ly service
     if [ "$LY_SERVICE_SUCCESS" = true ]; then
-        print_success "✓ Ly display manager enabled"
+        print_success "✅ Ly display manager enabled"
     else
-        print_error "✗ Ly display manager enable failed"
+        print_error "❌ Ly display manager enable failed"
     fi
     
     echo "=================================="
@@ -121,7 +182,6 @@ print_summary() {
 }
 
 # Start installation process
-print_status "Setting up for installation..."
 print_status "Starting dotfiles installation..."
 
 # Step 3: Clone dotfiles repo
@@ -133,7 +193,7 @@ if [ -d "$ACTUAL_HOME/dotfiles" ]; then
     mv "$ACTUAL_HOME/dotfiles" "$ACTUAL_HOME/$BACKUP_NAME"
 fi
 
-sudo -u "$ACTUAL_USER" git clone https://github.com/kdn251/dotfiles "$ACTUAL_HOME/dotfiles"
+git clone https://github.com/kdn251/dotfiles "$ACTUAL_HOME/dotfiles"
 print_success "Dotfiles repository cloned successfully"
 
 # Step 4: Install pacman packages
@@ -152,14 +212,14 @@ if [ -f "pacman-packages.txt" ]; then
     # Handle known conflicts: iptables vs iptables-nft
     if grep -q "iptables" pacman-packages.txt && grep -q "iptables-nft" pacman-packages.txt; then
         print_warning "Detected iptables conflict. Removing iptables-nft to avoid conflicts..."
-        pacman -Rdd --noconfirm iptables-nft 2>/dev/null || true
+        sudo pacman -Rdd --noconfirm iptables-nft 2>/dev/null || true
     elif grep -q "iptables-nft" pacman-packages.txt; then
         print_warning "Detected iptables-nft. Removing iptables to avoid conflicts..."
-        pacman -Rdd --noconfirm iptables 2>/dev/null || true
+        sudo pacman -Rdd --noconfirm iptables 2>/dev/null || true
     fi
     
     # Install packages with --noconfirm for automatic yes
-    if pacman -S --needed --noconfirm --overwrite "*" - < pacman-packages.txt; then
+    if sudo pacman -S --needed --noconfirm --overwrite "*" - < pacman-packages.txt; then
         PACMAN_SUCCESS=true
         print_success "Pacman packages installed successfully"
     else
@@ -177,10 +237,10 @@ if [ -f "pacman-packages.txt" ]; then
             package=$(echo "$package" | xargs)
             
             print_status "Installing $package..."
-            if pacman -S --needed --noconfirm --overwrite "*" "$package"; then
-                print_success "✓ $package installed"
+            if sudo pacman -S --needed --noconfirm --overwrite "*" "$package"; then
+                print_success "✅ $package installed"
             else
-                print_error "✗ Failed to install $package"
+                print_error "❌ Failed to install $package"
             fi
         done < pacman-packages.txt
         
@@ -193,6 +253,8 @@ if [ -f "pacman-packages.txt" ]; then
     fi
 else
     print_error "pacman-packages.txt not found in dotfiles directory"
+    # Clean up and exit
+    sudo rm /etc/sudoers.d/temp-nopasswd
     exit 1
 fi
 
@@ -205,10 +267,10 @@ if ! command -v yay &> /dev/null; then
     
     # Install yay as the actual user (makepkg cannot run as root)
     TEMP_DIR="/tmp/yay-install-$$"
-    sudo -u "$ACTUAL_USER" mkdir -p "$TEMP_DIR"
+    mkdir -p "$TEMP_DIR"
     cd "$TEMP_DIR"
-    sudo -u "$ACTUAL_USER" git clone https://aur.archlinux.org/yay.git .
-    sudo -u "$ACTUAL_USER" makepkg -si --noconfirm --needed
+    git clone https://aur.archlinux.org/yay.git .
+    makepkg -si --noconfirm --needed
     cd "$ACTUAL_HOME/dotfiles"
     rm -rf "$TEMP_DIR"
     
@@ -226,10 +288,10 @@ if [ -f "aur-packages.txt" ]; then
     print_status "Found $AUR_COUNT AUR packages to install"
     
     # Configure yay for non-interactive operation
-    sudo -u "$ACTUAL_USER" yay --save --answerclean All --answerdiff None --removemake
+    yay --save --answerclean All --answerdiff None --removemake
     
     # Install AUR packages
-    if sudo -u "$ACTUAL_USER" yay -S --needed --noconfirm - < aur-packages.txt; then
+    if yay -S --needed --noconfirm - < aur-packages.txt; then
         AUR_SUCCESS=true
         print_success "AUR packages installed successfully"
     else
@@ -238,23 +300,23 @@ if [ -f "aur-packages.txt" ]; then
     fi
 else
     print_error "aur-packages.txt not found in dotfiles directory"
+    # Clean up and exit
+    sudo rm /etc/sudoers.d/temp-nopasswd
     exit 1
 fi
 
-# Step 6: Already in dotfiles directory from previous steps
-
-# Step 7: Stow directories
+# Step 6: Stow directories
 print_status "Setting up dotfiles with stow..."
 
 # Check if stow is installed
 if ! command -v stow &> /dev/null; then
     print_warning "stow not found. Installing stow..."
-    pacman -S --noconfirm stow
+    sudo pacman -S --noconfirm stow
 fi
 
 # Remove conflicting config files before stowing
 print_status "Removing conflicting config files..."
-sudo -u "$ACTUAL_USER" rm -f "$ACTUAL_HOME/.config/hypr/hyprland.conf"
+rm -f "$ACTUAL_HOME/.config/hypr/hyprland.conf"
 
 # Try to stow all directories
 if stow */ 2>/dev/null; then
@@ -279,9 +341,9 @@ else
     done
 fi
 
-# Step 8: Create software directory
+# Step 7: Create software directory
 print_status "Creating software directory..."
-if sudo -u "$ACTUAL_USER" mkdir -p "$ACTUAL_HOME/software"; then
+if mkdir -p "$ACTUAL_HOME/software"; then
     SOFTWARE_DIR_SUCCESS=true
     print_success "Software directory created at $ACTUAL_HOME/software"
 else
@@ -289,9 +351,9 @@ else
     print_error "Failed to create software directory"
 fi
 
-# Step 9: Enable ly display manager service
+# Step 8: Enable ly display manager service
 print_status "Enabling ly display manager service..."
-if systemctl enable ly; then
+if sudo systemctl enable ly; then
     LY_SERVICE_SUCCESS=true
     print_success "Ly display manager service enabled"
 else
@@ -302,7 +364,7 @@ fi
 # Print installation summary
 print_summary
 
-# Step 8: Create software directory
-print_status "Creating software directory..."
-sudo -u "$ACTUAL_USER" mkdir -p "$ACTUAL_HOME/software"
-print_success "Software directory created at $ACTUAL_HOME/software"
+# Clean up - remove the temporary sudoers rule
+print_status "Cleaning up temporary sudo permissions..."
+sudo rm /etc/sudoers.d/temp-nopasswd
+print_success "Setup complete!"
