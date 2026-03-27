@@ -401,6 +401,22 @@ for SERVICE_NAME in "${REQUIRED_SERVICES[@]}"; do
   fi
 done
 
+# 3. Dedicated Ly Fix (since it's a special case)
+echo "Applying custom Ly display manager configuration..."
+if ! systemctl is-enabled ly@tty2.service &>/dev/null; then
+  # Disable the generic one if it was accidentally enabled
+  sudo systemctl disable ly.service &>/dev/null
+
+  # Apply your working fixes
+  sudo systemctl enable ly@tty2.service
+  sudo systemctl set-default graphical.target
+
+  # Optional: ensure no getty conflict on tty2
+  sudo systemctl mask getty@tty2.service
+
+  echo "Ly configured on TTY2. Please reboot to see changes."
+fi
+
 echo "Systemd service configuration complete."
 
 # Print installation summary
