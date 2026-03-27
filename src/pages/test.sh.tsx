@@ -1,7 +1,7 @@
 import { type GetServerSideProps } from "next";
 
 export const getServerSideProps: GetServerSideProps = ({ res }) => {
-  res.setHeader("Location", "/api/setup.sh");
+  res.setHeader("Location", "/api/test.sh");
   res.statusCode = 308; // Permanent Redirect
   res.end();
 
@@ -11,3 +11,4 @@ export const getServerSideProps: GetServerSideProps = ({ res }) => {
 export default function Setup() {
   return null;
 } 
+
