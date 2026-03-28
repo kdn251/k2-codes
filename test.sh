@@ -1,5 +1,22 @@
 #!/bin/bash
 
+# Check if yay is installed
+if ! command -v yay &>/dev/null; then
+  print_warning "yay not found. Installing yay first..."
+
+  # Install yay as the actual user (makepkg cannot run as root)
+  TEMP_DIR="/tmp/yay-install-$$"
+  mkdir -p "$TEMP_DIR"
+  cd "$TEMP_DIR"
+  git clone https://aur.archlinux.org/yay.git .
+  makepkg -si --noconfirm --needed
+  cd "$ACTUAL_HOME/dotfiles"
+  rm -rf "$TEMP_DIR"
+
+  YAY_INSTALLED=true
+  print_success "yay installed successfully"
+fi
+
 # Define the path to your package list
 AUR_FILE="$HOME/dotfiles/aur-packages.txt"
 
