@@ -1,34 +1,22 @@
 #!/bin/bash
 
-# Simple AUR test script
-set -e
+# Define the path to your package list
+AUR_FILE="$HOME/dotfiles/aur-packages.txt"
 
-GREEN='\033[0;32m'
-RED='\033[0;31m'
-NC='\033[0m'
-
-echo -e "${GREEN}Starting isolated AUR test...${NC}"
-
-# Define a small list of reliable packages
-# - google-chrome: standard binary
-# - visual-studio-code-bin: standard binary
-# - spotify: requires a GPG key (good for testing if that's the hurdle)
-TEST_PACKAGES=(
-  "google-chrome"
-  "visual-studio-code-bin"
-  "spotify"
-)
-
-# Clear cache to ensure a fresh pull
-echo "Cleaning yay cache..."
-rm -rf ~/.cache/yay/*
-
-echo "Installing: ${TEST_PACKAGES[*]}"
-
-# Run the install
-if yay -S --needed --noconfirm --answerdiff None --answerclean All "${TEST_PACKAGES[@]}"; then
-  echo -e "${GREEN}✅ Test successful! The packages were installed.${NC}"
+# 1. Read the file into an array (strips whitespace, comments, and empty lines)
+# This mimics the "hardcoded" success of your curl test
+if [ -f "$AUR_FILE" ]; then
+  mapfile -t AUR_PKGS < <(grep -v '^#' "$AUR_FILE" | grep -v '^$')
 else
-  echo -e "${RED}❌ Test failed. Check the output above.${NC}"
+  echo "Error: $AUR_FILE not found."
   exit 1
+fi
+
+echo "Installing AUR packages..."
+
+# 2. Use "${AUR_PKGS[@]}" to pass the list as individual arguments
+# 3. Add '|| true' so one bad package doesn't kill the whole script
+if yay -S --needed --noconfirm --answerdiff None --answerclean All "${AUR_PKGS[@]}" || true; then
+  AUR_SUCCESS=true
+  echo "INSTALLED correctly (Finished the sequence)"
 fi
