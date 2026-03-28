@@ -376,10 +376,8 @@ REQUIRED_SERVICES=(
   "docker.service"
   "enable-usb-wake.service"
   "firewalld.service"
-  "getty@.service"
   "keyd.service"
   "libvirtd.service"
-  "ly.service"
   "NetworkManager-dispatcher.service"
   "NetworkManager-wait-online.service"
   "NetworkManager.service"
@@ -419,25 +417,20 @@ done
 # =========================================================
 print_status "Applying custom Ly display manager configuration..."
 
-# We check for ly@tty2 specifically since that's your working fix
-if ! systemctl is-enabled ly@tty2.service &>/dev/null; then
-  # Disable the generic one if it was accidentally enabled by the loop above
-  sudo systemctl disable ly.service &>/dev/null
+# 1. Clean up any generic Ly enables from previous runs
+sudo systemctl disable ly.service &>/dev/null
 
-  # Apply your working fixes
-  if sudo systemctl enable ly@tty2.service &&
-    sudo systemctl set-default graphical.target &&
-    sudo systemctl mask getty@tty2.service; then
+# 2. Mask the standard getty on TTY2 so it CANNOT start
+sudo systemctl mask getty@tty2.service &>/dev/null
 
-    LY_SERVICE_SUCCESS=true
-    print_success "Ly configured on TTY2 successfully."
-  else
-    LY_SERVICE_SUCCESS=false
-    print_error "Failed to configure Ly on TTY2."
-  fi
-else
+# 3. Enable the specific Ly TTY2 instance
+if sudo systemctl enable ly@tty2.service; then
+  sudo systemctl set-default graphical.target
   LY_SERVICE_SUCCESS=true
-  print_status "Ly is already enabled on TTY2."
+  print_success "Ly configured on TTY2 successfully."
+else
+  LY_SERVICE_SUCCESS=false
+  print_error "Failed to configure Ly on TTY2."
 fi
 
 echo "Systemd service configuration complete."
