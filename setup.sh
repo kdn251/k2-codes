@@ -261,6 +261,16 @@ fi
 # Step 5: Install AUR packages with yay
 print_status "Installing AUR packages with yay..."
 
+# Resolve the rust/rustup conflict automatically.
+# We remove rustup to favor the standard rust package, which most AUR packages prefer.
+if pacman -Qi rustup &>/dev/null; then
+  print_status "Resolving rustup conflict..."
+  sudo pacman -Rns --noconfirm rustup
+fi
+
+# Ensure the standard rust package is present to satisfy dependencies
+sudo pacman -S --needed --noconfirm rust
+
 # Check if yay is installed
 if ! command -v yay &>/dev/null; then
   print_warning "yay not found. Installing yay first..."
