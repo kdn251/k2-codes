@@ -1,0 +1,50 @@
+---
+import Base from '../layouts/Base.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import Icon from '../components/Icon.astro';
+import { site } from '../data/site';
+---
+
+<Base title={`Page not found - ${site.name}`} description="That page does not exist.">
+  <Header />
+  <main id="main" class="missing">
+    <div class="container missing__inner">
+      <p class="eyebrow">404</p>
+      <h1 class="missing__heading">
+        This page <span class="mark">doesn't exist</span>.
+      </h1>
+      <p class="lede missing__body">
+        The link may be old or mistyped. Everything about working with Kevin is on the home page.
+      </p>
+      <a class="btn btn--primary" href="/">
+        Back to the site
+        <Icon name="arrow" size={18} class="arrow" />
+      </a>
+    </div>
+  </main>
+  <Footer />
+</Base>
+
+<style>
+  .missing {
+    display: grid;
+    place-items: center;
+    min-height: calc(100vh - 220px);
+    padding-block: clamp(64px, 12vw, 140px);
+  }
+  .eyebrow::before {
+    display: none;
+  }
+  .missing__inner {
+    text-align: center;
+  }
+  .missing__heading {
+    margin-top: 10px;
+    font-size: clamp(2.25rem, 6vw, 4.5rem);
+  }
+  .missing__body {
+    margin: 20px auto 32px;
+    max-width: 44ch;
+  }
+</style>

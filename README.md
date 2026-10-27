@@ -1,4 +1,4 @@
-# kevinnaughtonjr.com
+# k2.codes
 
 Personal brand site for Kevin Naughton Jr., built to show brands who Kevin is, who follows him, what he makes, and how to work with him.
 
@@ -17,8 +17,8 @@ Built with [Astro](https://astro.build) as a fully static site. No client framew
 
 - `public/images/kevin.jpg` - hero portrait. Replace with a high-resolution photo (at least 1000px wide, roughly 5:6).
 - `public/images/og.jpg` - social share image (1200x630). Not yet added.
-
-Partner logos: add a `logo` path to an entry in `partners` to swap the wordmark for artwork.
+- `public/images/brands/*.svg` - partner logos, referenced by the `logo` field of each entry in `partners`. Single-colour artwork works best because logos are painted through a CSS mask.
+- `public/setup.sh`, `public/start.sh`, `public/test.sh` - the VPS bootstrap scripts served at `k2.codes/setup.sh` and friends. They are plain static files; `vercel.json` sets their content type and redirects the old `/api/*.sh` paths.
 
 ## Development
 
@@ -45,4 +45,10 @@ Turn it off with `sudo tailscale serve --https=443 off`.
 
 ## Deploying
 
-`npm run build` produces a plain static site in `dist/`. It can be hosted on Vercel, Netlify, Cloudflare Pages or GitHub Pages without configuration beyond pointing at the `dist/` folder. Update `site` in `astro.config.mjs` and `site.url` in `src/data/site.ts` when the final domain is chosen.
+The site is deployed by Vercel from the `kdn251/k2-codes` GitHub repository (project `k2-codes`, domain [k2.codes](https://k2.codes)).
+
+- Every push to `main` builds and goes live on k2.codes.
+- Every pull request gets a preview deployment; Vercel posts the URL on the PR.
+- `vercel.json` pins the Astro framework preset, so no dashboard configuration is needed. Node is pinned to 24 through `engines` in `package.json` and `.node-version`.
+
+To build exactly as Vercel does, run `vercel pull && vercel build` from a checkout linked to the project.

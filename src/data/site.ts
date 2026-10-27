@@ -7,7 +7,7 @@ export const site = {
   title: 'Kevin Naughton Jr. - Software engineer, creator, founder',
   description:
     'Ex-Google software engineer and creator reaching 550K+ engineers across YouTube, LinkedIn, X and The Software Engineer Weekly. Partner with Kevin to reach developers who actually ship.',
-  url: 'https://kevinnaughtonjr.com',
+  url: 'https://k2.codes',
   location: 'New York City',
   email: null as string | null, // set to a business inbox to show a mailto link in Contact
   portrait: {

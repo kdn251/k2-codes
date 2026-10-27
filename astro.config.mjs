@@ -6,7 +6,7 @@ import { defineConfig } from 'astro/config';
 const allowedHosts = ['.ts.net'];
 
 export default defineConfig({
-  site: 'https://kevinnaughtonjr.com',
+  site: 'https://k2.codes',
   server: { host: '127.0.0.1', port: 4321, allowedHosts },
   vite: {
     server: { allowedHosts },
