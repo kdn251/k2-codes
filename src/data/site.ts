@@ -198,7 +198,7 @@ export const partners: Partner[] = [
     logo: '/images/brands/zenmux.svg',
     href: 'https://zenmux.ai',
     note: 'Newsletter sponsor',
-    scale: 0.8,
+    scale: 1,
   },
   {
     name: 'Monarch Money',
