@@ -219,7 +219,8 @@ import Icon from './Icon.astro';
       grid-template-columns: 1fr 1fr;
       row-gap: 8px;
     }
-    .stats__item:nth-child(3) {
+    /* Same specificity as the sibling rule above once Astro scopes it. */
+    .stats__item + .stats__item:nth-child(3) {
       padding-left: 0;
       border-left: 0;
     }
@@ -228,7 +229,7 @@ import Icon from './Icon.astro';
     }
   }
   @media (max-width: 420px) {
-    .stats__item + .stats__item {
+    .stats__item + .stats__item:not(:nth-child(3)) {
       padding-left: 16px;
     }
     .stats__item {
