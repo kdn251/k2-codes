@@ -220,6 +220,25 @@ export const partners: Partner[] = [
     note: 'YouTube sponsor',
     scale: 0.85,
   },
+  {
+    name: 'Levels.fyi',
+    logo: '/images/brands/levelsfyi.svg',
+    href: 'https://www.levels.fyi',
+    note: 'YouTube partner link',
+  },
+  {
+    name: 'Autonomous',
+    logo: '/images/brands/autonomous.svg',
+    href: 'https://www.autonomous.ai',
+    note: 'Desk setup referral partner',
+  },
+  {
+    name: 'Classpert',
+    logo: '/images/brands/classpert.svg',
+    href: 'https://classpert.com',
+    note: 'YouTube sponsor',
+    scale: 0.9,
+  },
 ];
 
 export const about = {
