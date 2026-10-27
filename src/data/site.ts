@@ -101,13 +101,6 @@ export const partners: Partner[] = [
     scale: 0.95,
   },
   {
-    name: 'Streamable',
-    logo: '/images/brands/streamable.png',
-    href: 'https://streamable.run',
-    note: 'Streaming partner',
-    scale: 0.9,
-  },
-  {
     name: 'PostHog',
     logo: '/images/brands/posthog.svg',
     href: 'https://posthog.com',
@@ -203,12 +196,6 @@ export const partners: Partner[] = [
     href: 'https://zenmux.ai',
     note: 'Newsletter sponsor',
     scale: 1,
-  },
-  {
-    name: 'Monarch Money',
-    logo: '/images/brands/monarch.svg',
-    href: 'https://www.monarchmoney.com',
-    note: 'Newsletter referral partner',
   },
   {
     name: 'AnkerWork',
