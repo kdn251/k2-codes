@@ -239,6 +239,26 @@ export const partners: Partner[] = [
     note: 'YouTube sponsor',
     scale: 0.9,
   },
+  {
+    name: 'interviewing.io',
+    logo: '/images/brands/interviewingio.svg',
+    href: 'https://interviewing.io',
+    note: 'YouTube partner',
+  },
+  {
+    name: 'Dice',
+    logo: '/images/brands/dice.svg',
+    href: 'https://www.dice.com',
+    note: 'YouTube campaign partner',
+    scale: 0.7,
+  },
+  {
+    name: 'Hirect',
+    logo: '/images/brands/hirect.svg',
+    href: 'https://hirect.in',
+    note: 'YouTube sponsor',
+    scale: 0.85,
+  },
 ];
 
 export const about = {
