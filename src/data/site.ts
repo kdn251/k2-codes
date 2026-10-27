@@ -63,15 +63,46 @@ export const headlineStats = [
   { value: '31K+', label: 'Newsletter subscribers' },
 ];
 
-// Brands that have sponsored or partnered on content. Rendered as wordmarks so
-// a new partner only needs a name. Add a `logo` (path under /public) to swap in artwork.
-export const partners: { name: string; note?: string; logo?: string }[] = [
-  { name: 'OpenAI', note: 'ChatGPT partner video' },
-  { name: 'Linear', note: 'YouTube series sponsor' },
-  { name: 'Genspark', note: 'Dedicated YouTube video' },
-  { name: 'Postmark', note: 'YouTube sponsor' },
-  { name: 'KaneAI', note: 'Dedicated YouTube video' },
-  { name: 'Streamable', note: 'Streaming partner' },
+// Brands that have sponsored or partnered on content. Logos live in /public/images/brands
+// and are painted through a CSS mask, so any SVG or transparent PNG works. `scale` nudges
+// a wordmark that reads too small or too large next to its neighbours.
+export type Partner = { name: string; logo: string; href?: string; note?: string; scale?: number };
+
+export const partners: Partner[] = [
+  { name: 'AWS', logo: '/images/brands/aws.svg', href: 'https://aws.amazon.com', scale: 0.9 },
+  {
+    name: 'OpenAI',
+    logo: '/images/brands/openai.svg',
+    href: 'https://openai.com',
+    note: 'ChatGPT partner video',
+    scale: 0.9,
+  },
+  {
+    name: 'Linear',
+    logo: '/images/brands/linear.svg',
+    href: 'https://linear.app',
+    note: 'YouTube series sponsor',
+  },
+  {
+    name: 'Genspark',
+    logo: '/images/brands/genspark.svg',
+    href: 'https://www.genspark.ai',
+    note: 'Dedicated YouTube video',
+  },
+  {
+    name: 'Postmark',
+    logo: '/images/brands/postmark.svg',
+    href: 'https://postmarkapp.com',
+    note: 'YouTube sponsor',
+    scale: 0.95,
+  },
+  {
+    name: 'Streamable',
+    logo: '/images/brands/streamable.png',
+    href: 'https://streamable.run',
+    note: 'Streaming partner',
+    scale: 0.9,
+  },
 ];
 
 export const about = {
