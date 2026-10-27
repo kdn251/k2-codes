@@ -1,0 +1,144 @@
+---
+import { newsletter } from '../data/site';
+import Icon from './Icon.astro';
+---
+
+<section class="section nl" id="newsletter">
+  <div class="container">
+    <div class="nl__card" data-reveal>
+      <div class="nl__copy">
+        <p class="eyebrow">{newsletter.eyebrow}</p>
+        <p class="nl__name">{newsletter.name}</p>
+        <h2 class="nl__heading">{newsletter.heading}</h2>
+        <p class="nl__body">{newsletter.body}</p>
+        <a class="btn btn--accent" href={newsletter.cta.href} target="_blank" rel="noopener">
+          {newsletter.cta.label}
+          <Icon name="arrow-up-right" size={18} class="arrow" />
+        </a>
+      </div>
+      <div class="nl__preview" aria-hidden="true">
+        <div class="mail">
+          <div class="mail__bar">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+          <div class="mail__from">
+            <strong>The Software Engineer Weekly</strong>
+            <span>Friday, 9:00 AM</span>
+          </div>
+          <div class="mail__subject">what I’d do differently if I started over</div>
+          <div class="mail__lines">
+            <span style="width: 92%"></span>
+            <span style="width: 78%"></span>
+            <span style="width: 85%"></span>
+            <span class="mail__ad">Sponsor slot</span>
+            <span style="width: 70%"></span>
+            <span style="width: 88%"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .nl__card {
+    display: grid;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    gap: clamp(32px, 5vw, 64px);
+    align-items: center;
+    padding: clamp(28px, 5vw, 64px);
+    border-radius: var(--radius-lg);
+    background: var(--bg-elevated);
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow-sm);
+  }
+  .nl__name {
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    color: var(--accent);
+    margin-bottom: 10px;
+  }
+  .nl__heading {
+    font-size: clamp(1.75rem, 3.6vw, 2.75rem);
+  }
+  .nl__body {
+    margin: 18px 0 28px;
+    color: var(--ink-2);
+    max-width: 52ch;
+  }
+  .nl__preview {
+    display: flex;
+    justify-content: center;
+  }
+  .mail {
+    width: min(100%, 360px);
+    padding: 18px 20px 22px;
+    border-radius: var(--radius);
+    background: var(--bg);
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow);
+    transform: rotate(-2deg);
+  }
+  .mail__bar {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 16px;
+  }
+  .mail__bar span {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--line-strong);
+  }
+  .mail__from {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    color: var(--ink-3);
+  }
+  .mail__from strong {
+    color: var(--ink);
+    font-weight: 600;
+  }
+  .mail__subject {
+    margin: 10px 0 14px;
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    font-size: 1.0625rem;
+  }
+  .mail__lines {
+    display: grid;
+    gap: 9px;
+  }
+  .mail__lines > span {
+    height: 8px;
+    border-radius: 4px;
+    background: var(--line);
+  }
+  .mail__ad {
+    display: grid;
+    place-items: center;
+    height: 38px !important;
+    width: 100%;
+    border-radius: 8px !important;
+    border: 1px dashed var(--accent);
+    background: var(--accent-soft) !important;
+    color: var(--accent);
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  @media (max-width: 899px) {
+    .nl__card {
+      grid-template-columns: 1fr;
+    }
+    .nl__preview {
+      order: -1;
+    }
+  }
+</style>

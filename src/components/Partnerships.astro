@@ -1,0 +1,190 @@
+---
+import { partnerships } from '../data/site';
+import Icon from './Icon.astro';
+---
+
+<section class="section packages" id="partnerships">
+  <div class="container">
+    <div class="section-head" data-reveal>
+      <p class="eyebrow">{partnerships.eyebrow}</p>
+      <h2 class="h2">{partnerships.heading}</h2>
+      <p class="lede">{partnerships.lede}</p>
+    </div>
+
+    <ul class="grid" data-reveal>
+      {partnerships.packages.map((p) => (
+        <li class={`pkg card${p.featured ? ' pkg--featured' : ''}`}>
+          <div class="pkg__top">
+            <span class="pkg__platform">{p.platform}</span>
+            {p.featured && <span class="pkg__badge">Most requested</span>}
+          </div>
+          <h3 class="pkg__name">{p.name}</h3>
+          {partnerships.showPrices && (
+            <p class="pkg__price">
+              <span class="pkg__from">from</span> {p.price}
+            </p>
+          )}
+          <p class="pkg__desc">{p.description}</p>
+          <a class="pkg__cta" href="#contact">
+            Inquire
+            <Icon name="arrow" size={16} class="arrow" />
+          </a>
+        </li>
+      ))}
+    </ul>
+
+    <div class="custom" data-reveal>
+      <div>
+        <h3 class="custom__title">{partnerships.custom.heading}</h3>
+        <p class="custom__body">{partnerships.custom.body}</p>
+      </div>
+      <a class="btn btn--primary" href={partnerships.custom.cta.href}>
+        {partnerships.custom.cta.label}
+        <Icon name="arrow" size={18} class="arrow" />
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .packages {
+    background: var(--bg-sunken);
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .pkg {
+    display: flex;
+    flex-direction: column;
+    padding: 26px 24px 22px;
+    transition:
+      transform 0.3s var(--ease),
+      box-shadow 0.3s var(--ease);
+  }
+  .pkg:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow);
+  }
+  .pkg--featured {
+    background: var(--dark);
+    border-color: var(--dark);
+    color: var(--dark-ink);
+  }
+  .pkg__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+  }
+  .pkg__platform {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+  .pkg--featured .pkg__platform {
+    color: var(--dark-ink-2);
+  }
+  .pkg__badge {
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: var(--highlight);
+    color: var(--ink);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+  }
+  .pkg__name {
+    margin-top: 16px;
+    font-size: 1.375rem;
+  }
+  .pkg__price {
+    margin-top: 10px;
+    font-family: var(--font-display);
+    font-size: 1.75rem;
+    font-weight: 600;
+    letter-spacing: -0.04em;
+    line-height: 1;
+  }
+  .pkg__from {
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    font-weight: 400;
+    letter-spacing: 0;
+    color: var(--ink-3);
+  }
+  .pkg--featured .pkg__from {
+    color: var(--dark-ink-2);
+  }
+  .pkg__desc {
+    margin-top: 16px;
+    font-size: 0.9375rem;
+    color: var(--ink-2);
+  }
+  .pkg--featured .pkg__desc {
+    color: var(--dark-ink-2);
+  }
+  .pkg__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: auto;
+    padding-top: 22px;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--accent);
+  }
+  .pkg--featured .pkg__cta {
+    color: #93c5fd;
+  }
+  .pkg__cta:hover .arrow {
+    transform: translateX(3px);
+  }
+  .pkg__cta .arrow {
+    transition: transform 0.25s var(--ease);
+  }
+
+  .custom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    margin-top: 24px;
+    padding: 28px 32px;
+    border-radius: var(--radius);
+    border: 1px dashed var(--line-strong);
+  }
+  .custom__title {
+    font-size: 1.25rem;
+  }
+  .custom__body {
+    margin-top: 6px;
+    color: var(--ink-2);
+    font-size: 0.9875rem;
+    max-width: 58ch;
+  }
+
+  @media (max-width: 899px) {
+    .grid {
+      grid-template-columns: 1fr 1fr;
+    }
+    .custom {
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 24px;
+    }
+  }
+  @media (max-width: 560px) {
+    .grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

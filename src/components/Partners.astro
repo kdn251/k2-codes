@@ -1,0 +1,119 @@
+---
+import { partners } from '../data/site';
+
+// Duplicate the list so the marquee loops seamlessly; the copy is aria-hidden.
+const loops = [partners, partners, partners];
+---
+
+<section class="partners section--tight" aria-labelledby="partners-title">
+  <div class="container">
+    <p class="partners__title" id="partners-title">
+      Brands I've partnered with
+    </p>
+  </div>
+  <div class="marquee" data-marquee>
+    <div class="marquee__track">
+      {loops.map((group, i) => (
+        <ul class="marquee__group" aria-hidden={i > 0 ? 'true' : undefined}>
+          {group.map((p) => (
+            <li class="partner" title={p.note}>
+              {p.logo ? (
+                <img src={p.logo} alt={p.name} height="28" />
+              ) : (
+                <span class="partner__word">{p.name}</span>
+              )}
+            </li>
+          ))}
+        </ul>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .partners {
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    padding-block: 36px;
+    background: var(--bg);
+  }
+  .partners__title {
+    margin-bottom: 22px;
+    text-align: center;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+  .marquee {
+    overflow: hidden;
+    mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+  }
+  .marquee__track {
+    display: flex;
+    width: max-content;
+    animation: scroll 36s linear infinite;
+  }
+  .marquee:hover .marquee__track {
+    animation-play-state: paused;
+  }
+  .marquee__group {
+    display: flex;
+    align-items: center;
+    gap: clamp(40px, 7vw, 96px);
+    padding: 0 clamp(20px, 3.5vw, 48px);
+    margin: 0;
+    list-style: none;
+  }
+  .partner {
+    display: flex;
+    align-items: center;
+    height: 40px;
+    color: var(--ink-2);
+    opacity: 0.85;
+    filter: grayscale(1);
+    transition:
+      opacity 0.25s var(--ease),
+      filter 0.25s var(--ease),
+      color 0.25s var(--ease);
+  }
+  .partner:hover {
+    opacity: 1;
+    filter: none;
+    color: var(--ink);
+  }
+  .partner__word {
+    font-family: var(--font-display);
+    font-size: 1.625rem;
+    font-weight: 700;
+    letter-spacing: -0.035em;
+    white-space: nowrap;
+  }
+  @keyframes scroll {
+    to {
+      transform: translateX(calc(-100% / 3));
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .marquee {
+      mask-image: none;
+      -webkit-mask-image: none;
+    }
+    .marquee__track {
+      animation: none;
+      width: auto;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .marquee__group[aria-hidden] {
+      display: none;
+    }
+    .marquee__group {
+      flex-wrap: wrap;
+      justify-content: center;
+      row-gap: 12px;
+    }
+  }
+</style>
