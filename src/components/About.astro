@@ -1,0 +1,95 @@
+---
+import { about } from '../data/site';
+---
+
+<section class="section about" id="about">
+  <div class="container about__grid">
+    <div class="about__head" data-reveal>
+      <p class="eyebrow">{about.eyebrow}</p>
+      <h2 class="h2">{about.heading}</h2>
+    </div>
+
+    <div class="about__body" data-reveal>
+      {about.paragraphs.map((p) => (
+        <p>{p}</p>
+      ))}
+    </div>
+
+    <ul class="facts" data-reveal>
+      {about.facts.map((f) => (
+        <li class="fact">
+          <span class="fact__value">{f.value}</span>
+          <span class="fact__label">{f.label}</span>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .about__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    column-gap: clamp(32px, 6vw, 96px);
+    row-gap: 48px;
+  }
+  .about__head {
+    position: sticky;
+    top: 104px;
+    align-self: start;
+  }
+  .about__body {
+    display: grid;
+    gap: 22px;
+    font-size: clamp(1.0625rem, 1.5vw, 1.1875rem);
+    color: var(--ink-2);
+  }
+  .about__body p:first-child {
+    color: var(--ink);
+  }
+  .facts {
+    grid-column: 2;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .fact {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 20px 18px;
+    background: var(--bg-elevated);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+  }
+  .fact__value {
+    font-family: var(--font-display);
+    font-size: 1.625rem;
+    font-weight: 600;
+    letter-spacing: -0.04em;
+    line-height: 1;
+  }
+  .fact__label {
+    font-size: 0.8125rem;
+    line-height: 1.4;
+    color: var(--ink-3);
+  }
+
+  @media (max-width: 899px) {
+    .about__grid {
+      grid-template-columns: 1fr;
+      row-gap: 32px;
+    }
+    .about__head {
+      position: static;
+    }
+    .facts {
+      grid-column: 1;
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+</style>

@@ -1,0 +1,341 @@
+---
+import { content, links } from '../data/site';
+import Icon from './Icon.astro';
+---
+
+<section class="section content" id="content">
+  <div class="container">
+    <div class="section-head" data-reveal>
+      <p class="eyebrow">{content.eyebrow}</p>
+      <h2 class="h2">{content.heading}</h2>
+      <p class="lede">{content.lede}</p>
+    </div>
+
+    <ul class="videos" data-reveal>
+      {content.videos.map((v, i) => (
+        <li class={`video${i === 0 ? ' video--featured' : ''}`}>
+          <a
+            class="video__link"
+            href={`https://www.youtube.com/watch?v=${v.id}`}
+            target="_blank"
+            rel="noopener"
+            aria-label={`Watch “${v.title}” on YouTube`}
+          >
+            <div class="video__thumb">
+              <img
+                src={`/images/videos/${v.id}.jpg`}
+                alt=""
+                width="1280"
+                height="720"
+                loading={i === 0 ? 'eager' : 'lazy'}
+                decoding="async"
+              />
+              <span class="video__play">
+                <Icon name="play" size={22} />
+              </span>
+              {v.partner && <span class="video__partner">With {v.partner}</span>}
+            </div>
+            <div class="video__meta">
+              <span class="video__tag">{v.tag}</span>
+              <span class="video__views">{v.views} views</span>
+            </div>
+            <h3 class="video__title">{v.title}</h3>
+          </a>
+        </li>
+      ))}
+    </ul>
+
+    <div class="shorts" data-reveal>
+      <div class="shorts__head">
+        <h3 class="shorts__title">Short-form</h3>
+        <p class="shorts__note">Vertical video for YouTube Shorts, Instagram Reels and TikTok.</p>
+      </div>
+      <ul class="shorts__list">
+        {content.shorts.map((v) => (
+          <li class="short">
+            <a
+              class="short__link"
+              href={`https://www.youtube.com/shorts/${v.id}`}
+              target="_blank"
+              rel="noopener"
+              aria-label={`Watch “${v.title}” on YouTube Shorts`}
+            >
+              <div class="short__thumb">
+                <img
+                  src={`/images/videos/${v.id}.jpg`}
+                  alt=""
+                  width="405"
+                  height="720"
+                  loading="lazy"
+                  decoding="async"
+                />
+                <span class="short__views">{v.views} views</span>
+              </div>
+              <h4 class="short__title">{v.title}</h4>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <div class="content__more" data-reveal>
+      <a class="btn btn--ghost" href={links.youtube} target="_blank" rel="noopener">
+        See all videos on YouTube
+        <Icon name="arrow-up-right" size={18} class="arrow" />
+      </a>
+    </div>
+
+    <ul class="pillars" data-reveal>
+      {content.pillars.map((p, i) => (
+        <li class="pillar">
+          <span class="pillar__index">0{i + 1}</span>
+          <h3 class="pillar__title">{p.title}</h3>
+          <p class="pillar__body">{p.body}</p>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .content {
+    background: var(--bg-elevated);
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+  .videos {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 28px 24px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .video--featured {
+    grid-column: span 2;
+    grid-row: span 2;
+  }
+  .video__link {
+    display: block;
+    height: 100%;
+  }
+  .video__thumb {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: var(--bg-sunken);
+    box-shadow: var(--shadow-sm);
+  }
+  .video__thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s var(--ease);
+  }
+  .video__link:hover .video__thumb img {
+    transform: scale(1.03);
+  }
+  .video__play {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    display: grid;
+    place-items: center;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: rgb(255 255 255 / 0.92);
+    color: var(--ink);
+    transform: translate(-50%, -50%) scale(0.9);
+    opacity: 0;
+    transition:
+      opacity 0.25s var(--ease),
+      transform 0.25s var(--ease);
+  }
+  .video__play svg {
+    margin-left: 3px;
+  }
+  .video__link:hover .video__play,
+  .video__link:focus-visible .video__play {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  .video__partner {
+    position: absolute;
+    left: 12px;
+    bottom: 12px;
+    padding: 5px 10px;
+    border-radius: 999px;
+    background: rgb(18 18 18 / 0.82);
+    color: #fff;
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    backdrop-filter: blur(6px);
+  }
+  .video__meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 14px;
+    font-size: 0.8125rem;
+    color: var(--ink-3);
+  }
+  .video__tag {
+    padding: 3px 9px;
+    border-radius: 999px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-weight: 600;
+    font-size: 0.75rem;
+  }
+  .video__title {
+    margin-top: 8px;
+    font-size: 1.0625rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.3;
+    text-wrap: pretty;
+  }
+  .video--featured .video__title {
+    font-size: clamp(1.25rem, 2vw, 1.625rem);
+  }
+  .shorts {
+    margin-top: clamp(40px, 6vw, 64px);
+  }
+  .shorts__head {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+  .shorts__title {
+    font-size: 1.25rem;
+  }
+  .shorts__note {
+    font-size: 0.875rem;
+    color: var(--ink-3);
+  }
+  .shorts__list {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 24px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .short__link {
+    display: block;
+  }
+  .short__thumb {
+    position: relative;
+    aspect-ratio: 9 / 16;
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: var(--bg-sunken);
+    box-shadow: var(--shadow-sm);
+  }
+  /* Source thumbnails are 16:9 with the vertical video centred; cover-fit
+     a 9:16 box so only the real frame shows. */
+  .short__thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transition: transform 0.6s var(--ease);
+  }
+  .short__link:hover .short__thumb img {
+    transform: scale(1.03);
+  }
+  .short__views {
+    position: absolute;
+    left: 12px;
+    bottom: 12px;
+    padding: 5px 10px;
+    border-radius: 999px;
+    background: rgb(18 18 18 / 0.78);
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: 600;
+    backdrop-filter: blur(6px);
+  }
+  .short__title {
+    margin-top: 12px;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    line-height: 1.35;
+  }
+  .content__more {
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+  }
+  .pillars {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin: clamp(56px, 8vw, 96px) 0 0;
+    padding: clamp(32px, 5vw, 56px) 0 0;
+    list-style: none;
+    border-top: 1px solid var(--line);
+  }
+  .pillar__index {
+    display: block;
+    margin-bottom: 14px;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    color: var(--accent);
+  }
+  .pillar__title {
+    font-size: 1.25rem;
+  }
+  .pillar__body {
+    margin-top: 10px;
+    color: var(--ink-2);
+    font-size: 0.9875rem;
+  }
+
+  @media (max-width: 899px) {
+    .videos {
+      grid-template-columns: 1fr 1fr;
+      gap: 24px 16px;
+    }
+    .video--featured {
+      grid-column: span 2;
+      grid-row: auto;
+    }
+    .pillars {
+      grid-template-columns: 1fr;
+      gap: 28px;
+    }
+  }
+  @media (max-width: 899px) {
+    .shorts__head {
+      flex-direction: column;
+      gap: 4px;
+    }
+    .shorts__list {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .short__title {
+      font-size: 0.8125rem;
+    }
+  }
+  @media (max-width: 560px) {
+    .videos {
+      grid-template-columns: 1fr;
+    }
+    .video--featured {
+      grid-column: auto;
+    }
+    .shorts__list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+  }
+</style>

@@ -1,0 +1,106 @@
+---
+import { contact, site, socials } from '../data/site';
+import Icon from './Icon.astro';
+---
+
+<section class="section contact" id="contact">
+  <div class="container">
+    <div class="contact__inner" data-reveal>
+      <p class="eyebrow contact__eyebrow">{contact.eyebrow}</p>
+      <h2 class="contact__heading">{contact.heading}</h2>
+      <p class="contact__body">{contact.body}</p>
+      <div class="contact__actions">
+        <a class="btn btn--light" href={contact.primary.href} target="_blank" rel="noopener">
+          {contact.primary.label}
+          <Icon name="arrow-up-right" size={18} class="arrow" />
+        </a>
+        <a class="btn btn--outline-light" href={contact.secondary.href} target="_blank" rel="noopener">
+          {contact.secondary.label}
+        </a>
+      </div>
+      {site.email && (
+        <p class="contact__email">
+          Or email <a href={`mailto:${site.email}`}>{site.email}</a>
+        </p>
+      )}
+      <ul class="contact__socials" aria-label="Social profiles">
+        {socials.map((s) => (
+          <li>
+            <a href={s.href} target="_blank" rel="noopener" aria-label={s.label} title={s.label}>
+              <Icon name={s.id} size={18} />
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  .contact {
+    background: var(--dark);
+    color: var(--dark-ink);
+  }
+  .contact__inner {
+    max-width: 720px;
+    margin-inline: auto;
+    text-align: center;
+  }
+  .contact__eyebrow {
+    color: var(--dark-ink-2);
+  }
+  .contact__eyebrow::before {
+    display: none;
+  }
+  .contact__heading {
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    font-weight: 700;
+    letter-spacing: -0.04em;
+  }
+  .contact__body {
+    margin: 24px auto 0;
+    max-width: 56ch;
+    font-size: 1.0625rem;
+    color: var(--dark-ink-2);
+  }
+  .contact__actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 36px;
+  }
+  .contact__email {
+    margin-top: 20px;
+    font-size: 0.9375rem;
+    color: var(--dark-ink-2);
+  }
+  .contact__email a {
+    color: var(--dark-ink);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .contact__socials {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    margin: 40px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .contact__socials a {
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    color: var(--dark-ink-2);
+    transition:
+      color 0.2s var(--ease),
+      background-color 0.2s var(--ease);
+  }
+  .contact__socials a:hover {
+    color: var(--dark-ink);
+    background: var(--dark-2);
+  }
+</style>

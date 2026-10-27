@@ -1,0 +1,238 @@
+---
+import { site, hero, headlineStats, socials } from '../data/site';
+import Icon from './Icon.astro';
+---
+
+<section class="hero" id="top">
+  <div class="container hero__grid">
+    <div class="hero__copy">
+      <p class="eyebrow">{hero.eyebrow}</p>
+      <h1 class="hero__title">
+        {hero.heading[0]} <span class="mark">{hero.heading[1]}</span>
+      </h1>
+      <p class="hero__lede">{hero.lede}</p>
+      <div class="hero__actions">
+        <a class="btn btn--primary" href={hero.primaryCta.href}>
+          {hero.primaryCta.label}
+          <Icon name="arrow" size={18} class="arrow" />
+        </a>
+        <a class="btn btn--ghost" href={hero.secondaryCta.href}>
+          <Icon name="play" size={16} />
+          {hero.secondaryCta.label}
+        </a>
+      </div>
+      <ul class="hero__socials" aria-label="Social profiles">
+        {socials.map((s) => (
+          <li>
+            <a href={s.href} target="_blank" rel="noopener" aria-label={s.label} title={s.label}>
+              <Icon name={s.id} size={18} />
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <figure class="hero__media">
+      <div class="hero__frame">
+        <img
+          src={site.portrait.src}
+          alt={site.portrait.alt}
+          width="520"
+          height="620"
+          fetchpriority="high"
+          decoding="async"
+        />
+      </div>
+      <figcaption class="hero__badge">
+        <span class="hero__badge-dot"></span>
+        Building in public from {site.location}
+      </figcaption>
+    </figure>
+  </div>
+
+  <div class="container">
+    <dl class="stats">
+      {headlineStats.map((s) => (
+        <div class="stats__item">
+          <dd class="stats__value">{s.value}</dd>
+          <dt class="stats__label">{s.label}</dt>
+        </div>
+      ))}
+    </dl>
+  </div>
+</section>
+
+<style>
+  .hero {
+    padding-top: clamp(32px, 6vw, 80px);
+    padding-bottom: clamp(48px, 6vw, 72px);
+    overflow: clip;
+  }
+  .hero__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+    gap: clamp(32px, 6vw, 80px);
+    align-items: center;
+  }
+  .hero__title {
+    font-size: clamp(3rem, 8vw, 6rem);
+    font-weight: 700;
+    letter-spacing: -0.045em;
+    line-height: 0.98;
+  }
+  .hero__lede {
+    margin-top: 28px;
+    max-width: 54ch;
+    font-size: clamp(1.0625rem, 1.5vw, 1.25rem);
+    color: var(--ink-2);
+  }
+  .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 36px;
+  }
+  .hero__socials {
+    display: flex;
+    gap: 6px;
+    margin: 36px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .hero__socials a {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    color: var(--ink-3);
+    transition:
+      color 0.2s var(--ease),
+      background-color 0.2s var(--ease);
+  }
+  .hero__socials a:hover {
+    color: var(--ink);
+    background: var(--bg-sunken);
+  }
+
+  .hero__media {
+    position: relative;
+    margin: 0;
+    justify-self: end;
+    width: min(100%, 460px);
+  }
+  .hero__frame {
+    position: relative;
+    aspect-ratio: 5 / 6;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: var(--bg-sunken);
+    box-shadow: var(--shadow);
+    transform: rotate(1.5deg);
+  }
+  .hero__frame::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.06);
+    pointer-events: none;
+  }
+  .hero__frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 60% 20%;
+  }
+  .hero__badge {
+    position: absolute;
+    left: -16px;
+    bottom: 28px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 16px 10px 12px;
+    border-radius: 999px;
+    background: var(--bg-elevated);
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow);
+    font-size: 0.875rem;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+  .hero__badge-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #16a34a;
+    box-shadow: 0 0 0 4px rgb(22 163 74 / 0.18);
+  }
+
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    margin: clamp(48px, 7vw, 88px) 0 0;
+    padding: 0;
+    border-top: 1px solid var(--line);
+  }
+  .stats__item {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 28px 24px 0 0;
+  }
+  .stats__item + .stats__item {
+    padding-left: 24px;
+    border-left: 1px solid var(--line);
+  }
+  .stats__value {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: clamp(1.75rem, 3.2vw, 2.5rem);
+    font-weight: 600;
+    letter-spacing: -0.04em;
+    line-height: 1;
+  }
+  .stats__label {
+    font-size: 0.875rem;
+    color: var(--ink-3);
+  }
+
+  @media (max-width: 899px) {
+    .hero__grid {
+      grid-template-columns: 1fr;
+    }
+    .hero__media {
+      order: -1;
+      justify-self: start;
+      width: min(100%, 320px);
+    }
+    .hero__badge {
+      left: auto;
+      right: -8px;
+      bottom: -14px;
+    }
+    .hero__frame {
+      transform: rotate(-1.5deg);
+    }
+    .stats {
+      grid-template-columns: 1fr 1fr;
+      row-gap: 8px;
+    }
+    .stats__item:nth-child(3) {
+      padding-left: 0;
+      border-left: 0;
+    }
+    .stats__item {
+      padding-top: 22px;
+    }
+  }
+  @media (max-width: 420px) {
+    .stats__item + .stats__item {
+      padding-left: 16px;
+    }
+    .stats__item {
+      padding-right: 12px;
+    }
+  }
+</style>
