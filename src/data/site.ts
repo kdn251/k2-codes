@@ -6,7 +6,7 @@ export const site = {
   handle: '@KevinNaughtonJr',
   title: 'Kevin Naughton Jr. - Software engineer, creator, founder',
   description:
-    'Ex-Google software engineer and creator reaching 550K+ engineers across YouTube, LinkedIn, X and The Software Engineer Weekly. Partner with Kevin to reach developers who actually ship.',
+    'Ex-Google software engineer and creator reaching 540K+ engineers across LinkedIn, YouTube, X, Instagram and The Software Engineer Weekly. Partner with Kevin to reach developers who actually ship.',
   url: 'https://k2.codes',
   location: 'New York City',
   email: null as string | null, // set to a business inbox to show a mailto link in Contact
@@ -50,16 +50,20 @@ export const socials = [
 export const hero = {
   eyebrow: 'Ex-Google software engineer · Creator · Founder',
   heading: ['Hey, I’m', 'Kevin.'],
-  lede: 'I spent three years as a software engineer at Google, then quit to build my own products and make content about it. 550K+ engineers follow along across YouTube, LinkedIn, X and my weekly newsletter.',
+  lede: 'I spent three years as a software engineer at Google, then quit to build my own products and make content about it. 540K+ engineers follow along across LinkedIn, YouTube, X, Instagram and my weekly newsletter.',
   primaryCta: { label: 'Work with me', href: '#contact' },
   secondaryCta: { label: 'Watch my content', href: '#content' },
 };
 
 // Combined reach shown in the hero. Keep these in sync with the platform cards below.
+// Combined audience is the sum of every public platform as of 2026-10-27:
+// LinkedIn 243K, YouTube 139K, X 100.7K, newsletter 31K, Instagram 23.9K,
+// GitHub 4.7K followers, Twitch 363, TikTok 350, Bluesky 172 = 540K.
 export const headlineStats = [
-  { value: '550K+', label: 'Combined audience' },
-  { value: '240K+', label: 'LinkedIn followers' },
+  { value: '540K+', label: 'Combined audience' },
+  { value: '243K', label: 'LinkedIn followers' },
   { value: '139K', label: 'YouTube subscribers' },
+  { value: '100K+', label: 'X followers' },
   { value: '31K+', label: 'Newsletter subscribers' },
 ];
 
@@ -356,7 +360,7 @@ export const audience = {
       name: 'LinkedIn',
       handle: 'kevindnaughtonjr',
       href: links.linkedin,
-      metric: '240K+',
+      metric: '243K',
       metricLabel: 'followers',
       detail: 'Daily posts · 1.1M impressions per month',
     },
@@ -449,7 +453,7 @@ export const partnerships = {
       name: 'Sponsored post',
       price: '$3,500',
       description:
-        'A dedicated post describing and promoting your product to 240K+ engineers and hiring managers.',
+        'A dedicated post describing and promoting your product to 243K engineers and hiring managers.',
     },
     {
       platform: 'Newsletter',

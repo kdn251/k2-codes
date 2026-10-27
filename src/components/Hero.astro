@@ -170,7 +170,7 @@ import Icon from './Icon.astro';
 
   .stats {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     margin: clamp(48px, 7vw, 88px) 0 0;
     padding: 0;
     border-top: 1px solid var(--line);
@@ -215,12 +215,17 @@ import Icon from './Icon.astro';
     .hero__frame {
       transform: rotate(-1.5deg);
     }
+    /* Combined audience on its own row, then the four platforms in a 2x2 grid. */
     .stats {
       grid-template-columns: 1fr 1fr;
       row-gap: 8px;
     }
-    /* Same specificity as the sibling rule above once Astro scopes it. */
-    .stats__item + .stats__item:nth-child(3) {
+    .stats__item:first-child {
+      grid-column: 1 / -1;
+    }
+    /* Items 2 and 4 start a row. Written as a sibling selector so it matches the
+       specificity of the sibling rule above once Astro scopes it. */
+    .stats__item + .stats__item:nth-child(even) {
       padding-left: 0;
       border-left: 0;
     }
@@ -229,7 +234,7 @@ import Icon from './Icon.astro';
     }
   }
   @media (max-width: 420px) {
-    .stats__item + .stats__item:not(:nth-child(3)) {
+    .stats__item + .stats__item:nth-child(odd) {
       padding-left: 16px;
     }
     .stats__item {
