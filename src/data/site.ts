@@ -103,6 +103,31 @@ export const partners: Partner[] = [
     note: 'Streaming partner',
     scale: 0.9,
   },
+  {
+    name: 'PostHog',
+    logo: '/images/brands/posthog.svg',
+    href: 'https://posthog.com',
+    note: 'Newsletter sponsor',
+  },
+  {
+    name: 'BrowserStack',
+    logo: '/images/brands/browserstack.svg',
+    href: 'https://www.browserstack.com',
+    note: 'Newsletter sponsor',
+  },
+  {
+    name: 'FusionAuth',
+    logo: '/images/brands/fusionauth.svg',
+    href: 'https://fusionauth.io',
+    note: 'Newsletter sponsor',
+  },
+  {
+    name: 'Miro',
+    logo: '/images/brands/miro.svg',
+    href: 'https://miro.com',
+    note: 'Newsletter sponsor',
+    scale: 0.7,
+  },
 ];
 
 export const about = {

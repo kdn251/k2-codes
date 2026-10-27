@@ -1,9 +1,13 @@
 ---
 import { partners } from '../data/site';
 
-// Each logo is painted through a CSS mask so every brand renders in the same
-// ink colour at the same visual weight regardless of the source artwork.
-// `scale` nudges wordmarks that read too small or too large next to the others.
+// Two rows scrolling in opposite directions. The second row starts half-way
+// through the list so different brands are on screen at any moment.
+// Each track repeats its row three times; the animation moves exactly one
+// third of the track width, so the loop is seamless and the copies are
+// hidden from assistive tech.
+const half = Math.ceil(partners.length / 2);
+const rows = [partners, [...partners.slice(half), ...partners.slice(0, half)]];
 ---
 
 <section class="partners section--tight" aria-labelledby="partners-title">
@@ -11,27 +15,38 @@ import { partners } from '../data/site';
     <p class="partners__title" id="partners-title">
       Brands I've worked with
     </p>
-    <ul class="wall">
-      {partners.map((p) => (
-        <li class="wall__cell">
-          <a
-            class="brand"
-            href={p.href}
-            target={p.href ? '_blank' : undefined}
-            rel={p.href ? 'noopener' : undefined}
-            title={p.note}
-          >
-            <span
-              class="brand__logo"
-              role="img"
-              aria-label={p.name}
-              style={`--logo:url('${p.logo}');--scale:${p.scale ?? 1}`}
-            />
-            <span class="visually-hidden">{p.name}</span>
-          </a>
-        </li>
-      ))}
-    </ul>
+  </div>
+
+  <div class="rows">
+    {rows.map((row, r) => (
+      <div class={`marquee marquee--${r === 0 ? 'left' : 'right'}`}>
+        <div class="marquee__track" style={`--count:${row.length}`}>
+          {[0, 1, 2].map((copy) => (
+            <ul class="marquee__group" aria-hidden={copy > 0 || r > 0 ? 'true' : undefined}>
+              {row.map((p) => (
+                <li class="brand">
+                  <a
+                    class="brand__link"
+                    href={p.href}
+                    target={p.href ? '_blank' : undefined}
+                    rel={p.href ? 'noopener' : undefined}
+                    tabindex={copy > 0 || r > 0 ? -1 : undefined}
+                    title={p.note ?? p.name}
+                  >
+                    <span
+                      class="brand__logo"
+                      role="img"
+                      aria-label={p.name}
+                      style={`--logo:url('${p.logo}');--scale:${p.scale ?? 1}`}
+                    />
+                  </a>
+                </li>
+              ))}
+            </ul>
+          ))}
+        </div>
+      </div>
+    ))}
   </div>
 </section>
 
@@ -39,7 +54,8 @@ import { partners } from '../data/site';
   .partners {
     border-top: 1px solid var(--line);
     border-bottom: 1px solid var(--line);
-    padding-block: clamp(40px, 5vw, 56px);
+    padding-block: clamp(36px, 5vw, 56px);
+    overflow: hidden;
   }
   .partners__title {
     margin-bottom: 28px;
@@ -50,67 +66,119 @@ import { partners } from '../data/site';
     text-transform: uppercase;
     color: var(--ink-3);
   }
-  .wall {
-    --cols: 6;
+  .rows {
     display: grid;
-    grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
-    gap: 1px;
+    gap: 22px;
+  }
+  .marquee {
+    --fade: clamp(40px, 8vw, 140px);
+    overflow: hidden;
+    mask-image: linear-gradient(
+      90deg,
+      transparent,
+      #000 var(--fade),
+      #000 calc(100% - var(--fade)),
+      transparent
+    );
+    -webkit-mask-image: linear-gradient(
+      90deg,
+      transparent,
+      #000 var(--fade),
+      #000 calc(100% - var(--fade)),
+      transparent
+    );
+  }
+  .marquee__track {
+    display: flex;
+    width: max-content;
+    /* ~2.6s per logo keeps the speed steady however long the list gets. */
+    animation: scroll-left calc(var(--count) * 2.6s) linear infinite;
+  }
+  .marquee--right .marquee__track {
+    animation-name: scroll-right;
+    animation-duration: calc(var(--count) * 3s);
+  }
+  .marquee:hover .marquee__track {
+    animation-play-state: paused;
+  }
+  .marquee__group {
+    display: flex;
+    align-items: center;
     margin: 0;
     padding: 0;
     list-style: none;
-    background: var(--line);
-    border: 1px solid var(--line);
-    border-radius: var(--radius);
-    overflow: hidden;
-  }
-  .wall__cell {
-    background: var(--bg);
   }
   .brand {
+    flex: none;
+  }
+  .brand__link {
     display: grid;
     place-items: center;
-    height: 104px;
-    padding: 0 20px;
+    height: 64px;
+    padding: 0 clamp(22px, 3vw, 40px);
     color: var(--ink-2);
-    transition:
-      color 0.25s var(--ease),
-      background-color 0.25s var(--ease);
+    transition: color 0.25s var(--ease);
   }
-  .brand:hover {
+  .brand__link:hover {
     color: var(--ink);
-    background: var(--bg-elevated);
   }
   .brand__logo {
     display: block;
-    width: 100%;
-    max-width: 150px;
-    height: 40px;
+    width: 150px;
+    height: 36px;
     background: currentColor;
     -webkit-mask: var(--logo) center / contain no-repeat;
     mask: var(--logo) center / contain no-repeat;
     transform: scale(var(--scale));
   }
 
-  @media (max-width: 1023px) {
-    .wall {
-      --cols: 4;
+  @keyframes scroll-left {
+    to {
+      transform: translateX(calc(-100% / 3));
     }
   }
-  @media (max-width: 639px) {
-    .wall {
-      --cols: 3;
+  @keyframes scroll-right {
+    from {
+      transform: translateX(calc(-100% / 3));
     }
-    .brand {
-      height: 84px;
-      padding: 0 14px;
+    to {
+      transform: translateX(0);
+    }
+  }
+
+  @media (max-width: 639px) {
+    .brand__link {
+      height: 52px;
     }
     .brand__logo {
-      height: 32px;
+      width: 120px;
+      height: 30px;
     }
   }
-  @media (max-width: 379px) {
-    .wall {
-      --cols: 2;
+
+  @media (prefers-reduced-motion: reduce) {
+    .rows {
+      gap: 0;
+    }
+    .marquee {
+      mask-image: none;
+      -webkit-mask-image: none;
+    }
+    .marquee--right {
+      display: none;
+    }
+    .marquee__track {
+      animation: none;
+      width: auto;
+      justify-content: center;
+    }
+    .marquee__group[aria-hidden] {
+      display: none;
+    }
+    .marquee__group {
+      flex-wrap: wrap;
+      justify-content: center;
+      row-gap: 8px;
     }
   }
 </style>
